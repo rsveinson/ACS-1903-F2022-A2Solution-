@@ -9,7 +9,6 @@ public class AssignmentTemplate{
         // vairables constants and objects
         Scanner scanner = new Scanner(System.in);
         
-
         System.out.println("end of program");
     }// end main
 }// end main

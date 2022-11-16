@@ -178,6 +178,7 @@ public class Peril{
             setCount++;
         }// end game loop
 
+        // print champion message
         System.out.println("\nend of program");
     }
 }
