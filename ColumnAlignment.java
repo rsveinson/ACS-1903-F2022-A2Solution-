@@ -16,13 +16,11 @@ public class ColumnAlignment{
         String strin;           // general input string
         String strout = "";     // string for aligned output
 
-        int width = 0;          // width of the output column
-        char stringType = 'n';  // type of string read from file, n is numeric otherwise non-numeric
-        char ch;                // place holder for each char in the sting
-        int dotCount = 0;       // counter for dots.
-        
-        int leftPadding = 0;        // number of spaces left to the left
-        int rightPadding = 0;       // number of spaces to the right
+        int width = 0;              // width of the output column
+        boolean numeric = true;     // if true the input string is numeric
+
+        // int leftPadding = 0;        // number of spaces left to the left
+        // int rightPadding = 0;       // number of spaces to the right
 
         // get column width
         System.out.println("enter the column width.");
@@ -36,87 +34,19 @@ public class ColumnAlignment{
 
             // work on alignment
             // analyze strin
-            dotCount = 0;               // 0 dots for each new string
-            stringType = 'n';           // assume string is numeric
 
-            // set wide input
-            if(strin.length() >= width){
-                stringType = 'l';
-            }// end input is wider than column
-            else{
-                // deal with the first character
-                ch = strin.charAt(0);
-                //System.out.println(ch);
+            // call method to determine if the string is numeric
+            numeric = isNumeric(strin, width);
+            //System.out.println("num " + numeric);
 
-                if(!(ch == '$' || Character.isDigit(ch))){
-                    stringType = 't';
-                    //System.out.println("this is text");
-                }// end first character
-
-                // now analyze the rest of the characters
-                // i added the && to the logical expression but it's not
-                // really needed, it stops the loop if the type is changed to 't'
-                for(int i = 1; i < strin.length() && stringType == 'n'; i++){
-                    ch = strin.charAt(i);   // extract each char in turn
-                    //System.out.println(ch);
-                    if(!Character.isDigit(ch)){
-                        if(ch == '.' && dotCount < 1){
-                            dotCount++;
-                        }// end not digit and dot count < 1
-                        else{
-                            stringType = 't';
-                        }// end not a digit not a dot
-
-                    }// end not a digit
-                }// end for int i
-
-            }// end width in range
-            
-            /* now the string type has been set
+            /* now we know if it's numeric or not
              * we can build the output string
-             * with the padding characters right or
+             * with the padding characters right and/or
              * left
              */
-            
-            // set strout to empty string
-            strout = "";
-            
-            // now pad out the string
-            if(stringType == 'l'){
-                strout = strin;     // simple left aligned on oversized string
-            }// end input is wider than column
-            else if(stringType == 'n'){
-                // calculate left padding
-                leftPadding = width - strin.length();
-                //System.out.println(leftPadding);
-                
-                // add left padding dots
-                for(int i = 0; i < leftPadding; i++){
-                    strout += ".";
-                }// end add left padding
-                // add strin
-                strout += strin;
-            }//end numeric
-            else{
-                // calculate left and right padding
-                leftPadding = width - strin.length();
-                rightPadding = leftPadding / 2;
-                leftPadding = leftPadding - rightPadding;
-                //System.out.println(leftPadding + " " + rightPadding);
-                
-                // add left padding dots
-                for(int i = 0; i < leftPadding; i++){
-                    strout += ".";
-                }// end add left padding
-                
-                // catenate strin
-                strout += strin;
-                
-                // add right padding
-                for(int i = leftPadding + strin.length(); i < width; i++){
-                    strout += ".";
-                }//end right padding
-            }// end text
+
+            // set strout the final formatted, padded string
+            strout = getOutputString(strin, numeric, width);
 
             // output the formatted/aligned string
             System.out.println(strout);
@@ -125,4 +55,111 @@ public class ColumnAlignment{
         System.out.println("\n-------------------------");
         System.out.println("end of program");
     }// end main
-}// end main
+
+    /* this method isn't called for in the instructions
+     * but I figured, what the heck, it makes the main method nice
+     * and tidy anbd i'll give you another example of decomposition 
+     * and it's implementation with a static method.
+     */
+    public static String getOutputString(String strin, boolean numeric, int width){
+        String strout;      // the formatted, padded final string for output
+
+        // variables for the left and right padding
+        int leftPadding = 0;        // number of spaces left to the left
+        int rightPadding = 0;       // number of spaces to the right
+         
+        /* strout has to be initialized otherwise we get the 
+         * "strout might not have been initialized" error message
+         */
+        strout = "";            
+        
+        /* if the input string is wider than width set 
+         * the output string to the input string (easy do this first)
+         */
+        if(strin.length() > width){
+            strout = strin;     // simple left aligned on oversized string
+        }// end input is wider than column
+        /* input string is not too wide so we have to 
+         * pad the output depending on whether it's numeric or not
+         */
+        else if(numeric){
+            // calculate left padding
+            leftPadding = width - strin.length();
+            //System.out.println(leftPadding);
+
+            // add left padding dots
+            for(int i = 0; i < leftPadding; i++){
+                strout += ".";
+            }// end add left padding
+            // add strin
+            strout += strin;
+        }//end numeric
+        else{
+            // calculate left and right padding
+            leftPadding = width - strin.length();
+            rightPadding = leftPadding / 2;
+            leftPadding = leftPadding - rightPadding;
+            //System.out.println(leftPadding + " " + rightPadding);
+
+            // add left padding dots
+            for(int i = 0; i < leftPadding; i++){
+                strout += ".";
+            }// end add left padding
+
+            // catenate strin
+            strout += strin;
+
+            // add right padding
+            for(int i = leftPadding + strin.length(); i < width; i++){
+                strout += ".";
+            }//end right padding
+        }// end text
+        return strout;
+    }
+
+    public static boolean isNumeric(String strin, int width){
+        boolean n = true;       // assume that the string is numeric
+        char ch;                // local variable for each character extracted from strin
+        int dotCount = 0;       // local variable to allow n to go to false if there are more
+        // than one . in the input string
+
+        /* nested if to deal with the three cases of input
+         * 1. stting is too wide, this is easy so I'll deal with it first
+         * 2. string is numeric: next easiest so do it second
+         * 3. string is text
+         */
+        if(strin.length() >= width){
+            n = false;
+        }// end input is wider than column
+        else{
+            // deal with the first character
+            ch = strin.charAt(0);
+            //System.out.println(ch);
+
+            if(!(ch == '$' || Character.isDigit(ch))){
+                n = false;
+                //System.out.println("this is text");
+            }// end first character
+
+            // now analyze the rest of the characters
+            // i added the && to the logical expression but it's not
+            // really needed, it stops the loop if n changes to false
+            for(int i = 1; i < strin.length() && n; i++){
+                ch = strin.charAt(i);   // extract each char in turn
+                //System.out.println(ch);
+                if(!Character.isDigit(ch)){
+                    if(ch == '.' && dotCount < 1){
+                        dotCount++;
+                    }// end not digit and dot count < 1
+                    else{
+                        n = false;
+                    }// end not a digit not a dot
+
+                }// end not a digit
+            }// end for int i
+        }// end width in range
+
+        // now we know if the input string is numeric or not
+        return n;
+    }// end isNumeric
+}// end class

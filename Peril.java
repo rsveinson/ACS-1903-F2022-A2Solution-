@@ -158,6 +158,8 @@ public class Peril{
             roundCount = 1; // re-set rounds to 1 after each set
 
             // increment round wins of winner
+            // this works even if both players have lost all of their
+            // tokens, the player with the highest negativ still wins
             //(p1tokens > p2Tokens) ? p1Rounds++ : p2Rounds++;
             if(p1Tokens > p2Tokens){
                 System.out.println("\n------------------------");
