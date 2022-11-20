@@ -58,7 +58,7 @@ public class ColumnAlignment{
 
     /* this method isn't called for in the instructions
      * but I figured, what the heck, it makes the main method nice
-     * and tidy anbd i'll give you another example of decomposition 
+     * and tidy anbd it'll give you another example of decomposition 
      * and it's implementation with a static method.
      */
     public static String getOutputString(String strin, boolean numeric, int width){
