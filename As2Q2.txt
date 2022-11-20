@@ -8,7 +8,11 @@ This is a longer line
 I don't know what you don't know
 22.007
 867-5309
+1234$56
 192.168.1.0
+hello 3
+$Not numeric
+i'm not. num
 I
 am
 hungry
