@@ -17,14 +17,39 @@ public class EnergyExpenditureWorking{
         
         double bmr = 0.0;               // basal medabolic rate
         double tdee = 0.0;              // total daily energy expenditure
-        double activityFactor = 0.0;    // based on input code   
+        double activityFactor = 0.0;    // based on input code 
         
-        // get personal info
-        System.out.println("Enter your weight (in kg), height (in cm), age (in years),and gender (m/f):");
-        weight = scanner.nextDouble();
-        height = scanner.nextInt();
-        age = scanner.nextInt();
-        gender = scanner.next().toLowerCase().charAt(0);  // have to extract the required char from the input string
+        String qc;          // continue or not
+        
+        // do-while loop
+        do{
+            // get personal info
+            System.out.println("Enter your weight (in kg), height (in cm), age (in years),and gender (m/f):");
+            weight = scanner.nextDouble();
+            height = scanner.nextInt();
+            age = scanner.nextInt();
+            gender = scanner.next().toLowerCase().charAt(0);  // have to extract the required char from the input string
+        
+            // get activity level
+            displayActivityLevelMenu();
+            activityLevel = scanner.next().toUpperCase().charAt(0);  // have to extract the required char from the input string
+
+            // get activity factor
+            activityFactor = getActivityFactor(activityLevel);
+            // calculate bmr
+            
+            // calculate tdee
+            
+            // output result
+            
+            
+            // quit or continue
+            System.out.println("Do you want to do another? Yes/No");
+            qc = scanner.next();
+            qc = qc.toLowerCase();
+        }// end do
+        while(qc.equals("yes"));
+        
         
         /*the following print lines are used to 
          * verify that the input is being read 
@@ -35,13 +60,8 @@ public class EnergyExpenditureWorking{
         // System.out.println(age);
         // System.out.println(gender);
         
-        // get activity level
-        System.out.println("Enter your activity level:");
-        System.out.println("[A]  Sedentary");
-        System.out.println("[B]  Lightly Active");
-        System.out.println("[C]  Moderate exercise");
-        System.out.println("[D]  Very Active");
-        System.out.println("[E]  Extra Active");
+        
+        
         
         activityLevel = scanner.next().toUpperCase().charAt(0);  // have to extract the required char from the input string
         //System.out.println(activityLevel);
@@ -61,22 +81,7 @@ public class EnergyExpenditureWorking{
          * set the level based on the code input
          * from the keyboard and the scale 
          * given in the assignment instructions
-         */
-        if(activityLevel == 'A'){
-            activityFactor = 1.2;
-        }// end A
-        else if(activityLevel == 'B'){
-            activityFactor = 1.375;
-        }// end B
-        else if(activityLevel == 'C'){
-            activityFactor = 1.55;
-        }// end C
-        else if(activityLevel == 'D'){
-            activityFactor = 1.725;
-        }// end D
-        else{
-            activityFactor = 1.9;
-        }// end E
+       */
         
         // tdee
         tdee = bmr * activityFactor;
@@ -89,4 +94,33 @@ public class EnergyExpenditureWorking{
         
         System.out.println("end of program");
     }
+    
+    public static double getActivityFactor(char al){
+    double af;
+
+        // normalize al to uppercase
+        al = Character.toUpperCase(al);
+
+        switch(al){
+            case 'A': af = 1.2;
+                break;
+            case 'B': af = 1.375;
+                break;
+            case 'C': af = 1.55;
+                break;
+            case 'D': af = 1.725;
+                break;
+            default: af = -1;
+        }// end swtich
+        return af;    
+    }// end get factor
+    
+    public static void displayActivityLevelMenu(){
+        System.out.println("Enter your activity level:");
+        System.out.println("[A]  Sedentary");
+        System.out.println("[B]  Lightly Active");
+        System.out.println("[C]  Moderate exercise");
+        System.out.println("[D]  Very Active");
+        System.out.println("[E]  Extra Active");
+    }// end displayactivity level
 }
